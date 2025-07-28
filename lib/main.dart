@@ -150,3 +150,7 @@ void main() {
     }
   }
 }
+
+// git remote add origin https://github.com/hadisafatima/Daily_Task_Manager.git
+// git branch -M main
+// git push -u origin main
