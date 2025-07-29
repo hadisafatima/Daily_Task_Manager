@@ -11,31 +11,35 @@ class TaskManager {
     print("2. Update Task");
     print("3. Delete Task");
     print("4. List Tasks");
-    print("5. Filter Tasks by Status (not implemented)");
+    print("5. Filter Tasks by Status");
     print("6. Total number of Tasks");
     print("7. Clear all Tasks");
     print("0. Exit");
   }
 
   void addTask() {
-    stdout.write("\nEnter Task Status: ");
+    stdout.write("\nEnter Task Status (In Progress, Pending, Completed) :");
     String? status = stdin.readLineSync();
 
     stdout.write("Enter Task Body: ");
     String? body = stdin.readLineSync();
 
+    var now = DateTime.now();
+    var dateOnly =
+        '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+
     tasks.add({
       "Task Status": status,
       "Task Body": body,
-      "Task Date": DateTime.now(),
+      "Task Date": dateOnly,
     });
 
-    print("\n✅ Task added successfully!");
+    print("\nTask added successfully!");
   }
 
   void updateTasks() {
     if (tasks.isEmpty) {
-      print("❌ No tasks to update.");
+      print("No tasks to update.");
       return;
     }
 
@@ -64,15 +68,15 @@ class TaskManager {
 
       task["Task Date"] = DateTime.now();
 
-      print("\n✅ Task #$index updated successfully.");
+      print("\nTask #$index updated successfully.");
     } else {
-      print("❌ Invalid task number.");
+      print("Invalid task number.");
     }
   }
 
   void deleteTasks() {
     if (tasks.isEmpty) {
-      print("❌ No tasks to delete.");
+      print("No tasks to delete.");
       return;
     }
 
@@ -84,9 +88,9 @@ class TaskManager {
 
     if (index != null && index > 0 && index <= tasks.length) {
       tasks.removeAt(index - 1);
-      print("\n✅ Task #$index deleted successfully.");
+      print("\nTask #$index deleted successfully.");
     } else {
-      print("❌ Invalid task number.");
+      print("Invalid task number.");
     }
   }
 
@@ -97,7 +101,29 @@ class TaskManager {
       for (int i = 0; i < tasks.length; i++) {
         var task = tasks[i];
         print(
-            '\n🔢 Task #${i + 1}\n📌 Status: ${task["Task Status"]}\n📝 Body: ${task["Task Body"]}\n📅 Date: ${task["Task Date"]}');
+          '\nTask #${i + 1}\nStatus: ${task["Task Status"]}\t\t\tDate: ${task["Task Date"]}\nBody: ${task["Task Body"]}',
+        );
+      }
+    }
+  }
+
+  void filterTasksByStatus() {
+    if (tasks.isEmpty) {
+      print("No Tasks Available");
+      return;
+    }
+
+    print("Enter the Status of task:");
+    String? status = stdin.readLineSync();
+
+    print('\n\n');
+
+    for (int i = 0; i < tasks.length; i++) {
+      Map task = tasks[i];
+      if (task["Task Status"] == status) {
+        print(
+          'Task#${i + 1}\nTask Status: ${task["Task Status"]}\t\t\tDate: ${task["Task Date"]}\n${task["Task Body"]}\n',
+        );
       }
     }
   }
@@ -106,7 +132,7 @@ class TaskManager {
 
   void clearAllTasks() {
     tasks.clear();
-    print("🗑️ All tasks deleted.");
+    print("All tasks deleted.");
   }
 }
 
@@ -122,7 +148,7 @@ void main() {
 
     switch (choice) {
       case 0:
-        print("👋 Exiting Task Manager. Goodbye!");
+        print("Exiting Task Manager. Goodbye!");
         return;
       case 1:
         taskManager.addTask();
@@ -137,20 +163,16 @@ void main() {
         taskManager.listAllTasks();
         break;
       case 5:
-        print("🚧 Filter by status not implemented yet.");
+        taskManager.filterTasksByStatus();
         break;
       case 6:
-        print("📊 Total Tasks: ${taskManager.totalTasks()}");
+        print("Total Tasks: ${taskManager.totalTasks()}");
         break;
       case 7:
         taskManager.clearAllTasks();
         break;
       default:
-        print("❌ Invalid choice. Try again.");
+        print("Invalid choice. Try again.");
     }
   }
 }
-
-// git remote add origin https://github.com/hadisafatima/Daily_Task_Manager.git
-// git branch -M main
-// git push -u origin main
